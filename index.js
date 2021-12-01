@@ -1,38 +1,30 @@
+const Usuario = require('./models/usuarios.model');
+
 require('dotenv').config();
+
 
 const express = require('express');
 const cors = require('cors');
 
+
 const { dbConnection } = require('./database/config');
 
-// creamos el servidor express
+// creamos el servidor express node
 const app = express();
+
+//Configurar Cors
+app.use(cors());
+
+//Lectura de Body
+app.use(express.json());
 
 //Base de Datos
 dbConnection();
 
-console.log(process.env);
-
-
-//Configurar Cors
-app.use(cors())
-
 //Rutas
-app.get('/', (request, respond) => {
+app.use('/api/usuarios', require('./routes/usuarios.routes'));
 
-    respond.json({
-        ok: 'True',
-        msg: 'Hola mundos'
-    });
-});
 
 app.listen(process.env.PORT, () => {
     console.log('Servidor corriendo en el puerto: ' + process.env.PORT);
 });
-
-
-/*
-Notas:
-  - Para las APIS seran en json
-
-    */
