@@ -65,8 +65,28 @@ actualizarUsuario = async(req, resp) => {
             });
         }
 
+          //Actualizaciones
+          const {password, google, email, ...campos}= req.body;
+
+        if(usuarioDB.email != email) {
+       
+            const emailExiste= await Usuario.findOne({ email });
+
+            if(emailExiste) {
+                return resp.status(400).json({
+                    ok: false,
+                    msg: 'Ya existe el usuario con este email'
+                })
+            }
+        }
+
+        campos.email= email;
+        usuarioUpdate= await campos.findByIdAndUpdate(uid, campos, { new: true} );
+      
+
         resp.json({
-            ok: true
+            ok: true,
+         usuario: usuarioUpdate
         });
 
     } catch (error) {
