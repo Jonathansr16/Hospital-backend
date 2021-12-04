@@ -50,7 +50,7 @@ const CrearUsuario = async(req, resp = response) => {
 }
 
 
-actualizarUsuario = async(req, resp) => {
+const actualizarUsuario = async(req, resp) => {
 
     const uid = req.params.id;
 
@@ -98,9 +98,40 @@ actualizarUsuario = async(req, resp) => {
     }
 }
 
+const borrarUsuario = async(req, resp) => {
+      
+    const uid= req.params.id_user;
+
+        try {
+            const userDB = await Usuario.findById(uid);
+
+          if(!userDB) {
+              return resp.status(400).json({
+                ok: false,
+                msg: 'No existe el usuario con ese id'
+              });
+          }
+
+          await Usuario.findByIdAndDelete(uid);
+
+          resp.json({
+              ok: true,
+              msg: 'Usuario eliminado'
+          });
+
+        } catch(error) {
+            console.warm(error);
+            resp.status(400).json({
+                ok: false,
+                msg: "error inesperado"
+            });
+        }
+}
+
 
 module.exports = {
     getUsuarios,
     CrearUsuario,
-    actualizarUsuario
+    actualizarUsuario,
+    borrarUsuario
 }
